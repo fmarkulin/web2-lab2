@@ -15,7 +15,7 @@ export default function ChatMessages({ user }: { user: UserProfile }) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "messages"), (snapshot) => {
-      const messages = snapshot.docs.map((doc) => {
+      const newMessages = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           ...data,
@@ -23,7 +23,17 @@ export default function ChatMessages({ user }: { user: UserProfile }) {
         } as Message;
       });
 
-      const last10Messages = messages.slice(-10);
+      const last10Messages = newMessages
+        .sort((a, b) => {
+          if (a.timestamp.isBefore(b.timestamp)) {
+            return -1;
+          } else if (a.timestamp.isAfter(b.timestamp)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        .slice(-20);
 
       setMessages(last10Messages);
     });
