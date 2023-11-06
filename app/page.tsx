@@ -2,11 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FormEvent, useRef, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 export default function Home() {
+  const { user, isLoading, error } = useUser();
   const messageRef = useRef<HTMLDivElement>(null);
-  const hello = "Hello World";
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      document.cookie = `sub=${user.sub}; path=/;`;
+    } else {
+      document.cookie = `sub=; path=/;`;
+    }
+  }, [user, isLoading]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,10 +34,7 @@ export default function Home() {
           <Input type="text" placeholder="Enter your message" />
           <Button type="submit">Submit</Button>
         </form>
-        <div ref={messageRef}></div>
-        <div>
-          <script>alert(hello)</script>
-        </div>
+        <div id="message" ref={messageRef}></div>
       </div>
     </>
   );

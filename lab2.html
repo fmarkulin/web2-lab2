@@ -11,16 +11,21 @@
       <input type="submit" value="Submit" />
     </form>
     <div id="message"></div>
+    <div>
+      <script>
+        alert("hello");
+      </script>
+    </div>
   </body>
 
   <script>
     document
       .getElementById("myForm")
       .addEventListener("submit", function (event) {
-        event.preventDefault(); // This prevents the form from being submitted
+        event.preventDefault();
         var input = document.getElementById("myInput").value;
-        console.log(input); // This will log the input value to the console
-        document.getElementById("message").innerHTML = input; // This line is vulnerable to XSS attacks
+        console.log(input);
+        document.getElementById("message").innerHTML = input; // vulnerable to XSS attacks
       });
   </script>
 </html>
