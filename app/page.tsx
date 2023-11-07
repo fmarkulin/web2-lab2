@@ -2,11 +2,10 @@
 
 import Chat from "@/components/Chat";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
   const { user, isLoading, error } = useUser();
-  const messageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isLoading && user) {
@@ -20,6 +19,7 @@ export default function Home() {
     <>
       <div className="max-w-xl mx-auto">
         <h1 className="text-4xl font-bold mb-5">Public Chat Room</h1>
+        {!user && <p>Please login to use chat</p>}
         {user && <Chat user={user} />}
       </div>
     </>

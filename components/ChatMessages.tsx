@@ -7,8 +7,11 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/data/firebase";
 import dayjs from "dayjs";
 import ChatMessage from "./ChatMessage";
+import useSecure from "@/hooks/useSecure";
 
 export default function ChatMessages({ user }: { user: UserProfile }) {
+  const { secure } = useSecure();
+
   const [messages, setMessages] = useState<Message[]>([]);
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -39,7 +42,7 @@ export default function ChatMessages({ user }: { user: UserProfile }) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [secure]);
 
   useEffect(() => {
     if (contentRef.current) {

@@ -6,13 +6,14 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Footer from "@/components/Footer";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { SecurityProvider } from "@/components/SecurityContext";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "WEB2 - Round Robin",
   description:
-    "Web app by Fran Markulin for the 1st project assignment of the course WEB2",
+    "Web app by Fran Markulin for the 2nd project assignment of the course WEB2",
 };
 
 export default function RootLayout({
@@ -23,21 +24,23 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <UserProvider>
-        <body
-          className={`${spaceGrotesk.className} relative selection:bg-primary selection:text-primary-foreground min-h-screen`}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+        <SecurityProvider>
+          <body
+            className={`${spaceGrotesk.className} relative selection:bg-primary selection:text-primary-foreground min-h-screen`}
           >
-            <Toaster />
-            <Header />
-            <main className="max-w-7xl mx-auto p-8 pb-16">{children}</main>
-            <Footer />
-          </ThemeProvider>
-        </body>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster />
+              <Header />
+              <main className="max-w-7xl mx-auto p-8 pb-16">{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </body>
+        </SecurityProvider>
       </UserProvider>
     </html>
   );

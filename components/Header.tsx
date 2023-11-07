@@ -14,16 +14,30 @@ import {
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import AvatarLoading from "./AvatarLoading";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import useSecure from "@/hooks/useSecure";
 
 export default function Header() {
   const { user, isLoading, error } = useUser();
+  const { secure, setSecure } = useSecure();
 
   return (
     <header className="sticky bg-inherit top-0 left-0 right-0 z-10 shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-center py-3 px-8">
-        <Link aria-label="Home page" href={"/"}>
-          <Home className="w-8 h-8" />
-        </Link>
+        <div className="flex gap-4 items-center">
+          <Link aria-label="Home page" href={"/"}>
+            <Home className="w-8 h-8" />
+          </Link>
+          <div className="flex gap-2 items-center">
+            <Switch
+              id="secureSwitch"
+              checked={secure}
+              onCheckedChange={setSecure}
+            />
+            <Label htmlFor="secureSwitch">Enable security</Label>
+          </div>
+        </div>
         <div className="flex gap-4 items-center">
           {isLoading && <AvatarLoading />}
           {!isLoading && error && (

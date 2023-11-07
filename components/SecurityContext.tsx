@@ -1,25 +1,29 @@
-import {
-  FunctionComponent,
-  PropsWithChildren,
-  createContext,
-  useState,
-} from "react";
+"use client";
 
-interface MyContextType {
+import { createContext, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+
+interface SecurityContextType {
   secure: boolean;
   setSecure: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MyContext = createContext<MyContextType | undefined>(undefined);
+const SecurityContext = createContext<SecurityContextType | undefined>(
+  undefined
+);
 
-const MyProvider: FunctionComponent = ({ children }: PropsWithChildren<{}>) => {
-  const [secure, setSecure] = useState<boolean>(false);
+interface SecurityProviderProps {
+  children: React.ReactNode;
+}
+
+const SecurityProvider = ({ children }: { children: React.ReactNode }) => {
+  const [secure, setSecure] = useLocalStorage<boolean>("secure", true);
 
   return (
-    <MyContext.Provider value={{ secure, setSecure }}>
+    <SecurityContext.Provider value={{ secure, setSecure }}>
       {children}
-    </MyContext.Provider>
+    </SecurityContext.Provider>
   );
 };
 
-export { MyContext, MyProvider };
+export { SecurityContext, SecurityProvider };

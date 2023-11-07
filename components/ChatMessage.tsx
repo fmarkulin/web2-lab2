@@ -1,5 +1,8 @@
+"use client";
+
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
+import useSecure from "@/hooks/useSecure";
 
 export default function ChatMessage({
   message,
@@ -8,6 +11,8 @@ export default function ChatMessage({
   message: Message;
   user: UserProfile;
 }) {
+  const { secure } = useSecure();
+
   return (
     <Card
       className={`w-3/4 border-primary ${
@@ -16,8 +21,11 @@ export default function ChatMessage({
     >
       <CardHeader>
         <CardDescription>{message.email}</CardDescription>
-        <CardContent className="p-0">
-          <div dangerouslySetInnerHTML={{ __html: message.content }} />
+        <CardContent className="p-0 break-words">
+          {!secure && (
+            <div dangerouslySetInnerHTML={{ __html: message.content }} />
+          )}
+          {secure && <p>{message.content}</p>}
         </CardContent>
       </CardHeader>
     </Card>
