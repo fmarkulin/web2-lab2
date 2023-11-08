@@ -20,7 +20,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     console.log("auth check trigger");
-    if (!secure) {
+    if (secure === undefined) return;
+
+    if (secure === false) {
       setChecking(false);
       return;
     }
@@ -41,6 +43,7 @@ export default function AdminPage() {
           setChecking(false);
         }
       } else {
+        toast.error("Please log in");
         router.push("/");
         return;
       }
@@ -52,8 +55,8 @@ export default function AdminPage() {
   return (
     <div className="max-w-xl mx-auto">
       <h1 className="text-4xl font-bold mb-5">Admin Page</h1>
-      <p>If you're an admin, hello!</p>
-      <p>If you're not, then you shouldn't be here 🧐</p>
+      <p>{"If you're an admin, hello!"}</p>
+      <p>{"If you're not, then you shouldn't be here 🧐"}</p>
     </div>
   );
 }

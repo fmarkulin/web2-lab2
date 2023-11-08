@@ -1,11 +1,19 @@
 "use client";
 
-import { createContext, useState } from "react";
+export const dynamic = "force-dynamic";
+
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 interface SecurityContextType {
-  secure: boolean;
-  setSecure: React.Dispatch<React.SetStateAction<boolean>>;
+  secure: boolean | undefined;
+  setSecure: Dispatch<SetStateAction<boolean | undefined>>;
 }
 
 const SecurityContext = createContext<SecurityContextType | undefined>(
@@ -16,8 +24,18 @@ interface SecurityProviderProps {
   children: React.ReactNode;
 }
 
-const SecurityProvider = ({ children }: { children: React.ReactNode }) => {
-  const [secure, setSecure] = useLocalStorage<boolean>("secure", true);
+const SecurityProvider = ({ children }: SecurityProviderProps) => {
+  const [secure, setSecure] = useLocalStorage<boolean | undefined>(
+    "secure",
+    undefined
+  );
+
+  useEffect(() => {
+    if (secure === undefined) {
+      console.log("secure was undefined, setting from localStorage");
+      setSecure(localStorage.getItem("secure") === "true");
+    }
+  }, [secure]);
 
   return (
     <SecurityContext.Provider value={{ secure, setSecure }}>
