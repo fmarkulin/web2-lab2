@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
+import useLocalStorage from "@/hooks/useLocalStorage";
 import {
   Dispatch,
   SetStateAction,
@@ -9,7 +10,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLocalStorage } from "usehooks-ts";
 
 interface SecurityContextType {
   secure: boolean | undefined;
@@ -27,15 +27,8 @@ interface SecurityProviderProps {
 const SecurityProvider = ({ children }: SecurityProviderProps) => {
   const [secure, setSecure] = useLocalStorage<boolean | undefined>(
     "secure",
-    undefined
+    true
   );
-
-  useEffect(() => {
-    if (secure === undefined) {
-      console.log("secure was undefined, setting from localStorage");
-      setSecure(localStorage.getItem("secure") === "true");
-    }
-  }, [secure]);
 
   return (
     <SecurityContext.Provider value={{ secure, setSecure }}>
